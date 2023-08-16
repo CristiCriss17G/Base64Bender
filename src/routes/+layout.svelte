@@ -6,7 +6,16 @@
 	// Most of your app wide CSS should be put in this file
 	import '../app.postcss';
 	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
+
+	import { pwaInfo } from 'virtual:pwa-info';
+
+	$: webManifestLink = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 </script>
+
+<svelte:head>
+	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+	{@html webManifestLink}
+</svelte:head>
 
 <!-- App Shell -->
 <AppShell>
