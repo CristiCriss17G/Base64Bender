@@ -1,10 +1,12 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { SvelteKitPWA } from '@vite-pwa/sveltekit';
+import { purgeCss } from 'vite-plugin-tailwind-purgecss';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	plugins: [
 		sveltekit(),
+		purgeCss(),
 		SvelteKitPWA({
 			mode: (process.env.NODE_ENV as 'development' | 'production' | undefined) || 'development',
 			selfDestroying: process.env.SELF_DESTROYING_SW === 'true',
