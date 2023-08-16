@@ -38,7 +38,7 @@ RUN npm run build
 # Create a new stage to run the application with minimal runtime dependencies
 # where the necessary files are copied from the build stage.
 # Use nginx image to serve the static site
-FROM nginx:alpine
+FROM nginx:alpine as runtime
 
 # Copy the static assets from the build image
 COPY --from=build /usr/src/app/build /usr/share/nginx/html
