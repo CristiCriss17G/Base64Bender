@@ -5,6 +5,26 @@ import { userSettings } from './userSettings';
 export const originalText = writable('');
 export const base64Text = writable('');
 
+// let isProgrammaticUpdate = false;
+
+// originalText.subscribe((value) => {
+// 	// if (!isProgrammaticUpdate) {
+// 	// Only encode if the change wasn't triggered programmatically
+// 	console.log('Original text changed:', value);
+// 	// toBase64(value);
+// 	// }
+// 	// isProgrammaticUpdate = false; // Reset the flag
+// });
+
+// base64Text.subscribe((value) => {
+// 	// if (!isProgrammaticUpdate) {
+// 	// Only decode if the change wasn't triggered programmatically
+// 	console.error('Base64 text changed:', value);
+// 	// fromBase64(value);
+// 	// }
+// 	// isProgrammaticUpdate = false; // Reset the flag
+// });
+
 export function toBase64(str: string) {
 	try {
 		let encoded = btoa(

@@ -14,14 +14,14 @@
 </svelte:head>
 
 <div class="main-container">
-	<div class="main-column">
+	<section class="main-column">
 		<h2 class="h2">Base64 Encoder</h2>
 		<Base64Encoder value={base64Text} base64EncoderFunction={fromBase64} {userSettings} />
-	</div>
-	<div class="main-column">
+	</section>
+	<section class="main-column">
 		<h2 class="h2">Base64 Decoder</h2>
-		<Base64Decoder value={originalText} base64DecoderFunction={toBase64} />
-	</div>
+		<Base64Decoder value={originalText} base64DecoderFunction={toBase64} {userSettings} />
+	</section>
 </div>
 
 <style lang="postcss">
