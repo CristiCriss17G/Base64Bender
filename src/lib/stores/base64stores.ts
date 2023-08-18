@@ -1,29 +1,13 @@
 import { writable, get } from 'svelte/store';
-import { userSettings } from './userSettings';
+import { userSettings, checkOrUpdateUserSettings } from './userSettings';
 
 // These stores will hold the values of the textareas.
 export const originalText = writable('');
 export const base64Text = writable('');
 
-// let isProgrammaticUpdate = false;
-
-// originalText.subscribe((value) => {
-// 	// if (!isProgrammaticUpdate) {
-// 	// Only encode if the change wasn't triggered programmatically
-// 	console.log('Original text changed:', value);
-// 	// toBase64(value);
-// 	// }
-// 	// isProgrammaticUpdate = false; // Reset the flag
-// });
-
-// base64Text.subscribe((value) => {
-// 	// if (!isProgrammaticUpdate) {
-// 	// Only decode if the change wasn't triggered programmatically
-// 	console.error('Base64 text changed:', value);
-// 	// fromBase64(value);
-// 	// }
-// 	// isProgrammaticUpdate = false; // Reset the flag
-// });
+userSettings.subscribe(() => {
+	toBase64(get(originalText));
+});
 
 export function toBase64(str: string) {
 	try {
@@ -49,10 +33,12 @@ export function fromBase64(encoded: string) {
 	try {
 		// Detect URL-safe characters
 		if (/-|_/.test(encoded)) {
-			userSettings.update((settings) => ({ ...settings, isUrlSafe: true }));
+			const newUserSettings = { ...get(userSettings), isUrlSafe: true };
+			checkOrUpdateUserSettings(newUserSettings);
 			encoded = encoded.replace(/-/g, '+').replace(/_/g, '/');
 		} else {
-			userSettings.update((settings) => ({ ...settings, isUrlSafe: false }));
+			const newUserSettings = { ...get(userSettings), isUrlSafe: false };
+			checkOrUpdateUserSettings(newUserSettings);
 		}
 		const decoded = decodeURIComponent(
 			Array.prototype.map
