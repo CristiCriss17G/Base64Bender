@@ -13,7 +13,12 @@
 {#if isMobile}
 	<div class="container p-10 flex flex-col place-items-center gap-4 h-full place-content-center">
 		<LightSwitch />
-		<button class="btn hover:rotate-45" on:click={openSettingsMenu}>
+		<button
+			class="btn hover:rotate-45"
+			on:click={openSettingsMenu}
+			aria-label="Settings"
+			title="Settings"
+		>
 			<Cog6Tooth />
 		</button>
 		<a
@@ -27,7 +32,12 @@
 	</div>
 {:else}
 	<LightSwitch />
-	<button class="btn hover:rotate-45" on:click={openSettingsMenu}>
+	<button
+		class="btn hover:rotate-45"
+		on:click={openSettingsMenu}
+		aria-label="Settings"
+		title="Settings"
+	>
 		<Cog6Tooth />
 	</button>
 	<a

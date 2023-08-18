@@ -1,5 +1,6 @@
 import { writable, get } from 'svelte/store';
 import { userSettings, checkOrUpdateUserSettings } from './userSettings';
+import { toastStore, type ToastSettings } from '@skeletonlabs/skeleton';
 
 // These stores will hold the values of the textareas.
 export const originalText = writable('');
@@ -26,6 +27,13 @@ export function toBase64(str: string) {
 		base64Text.set(encoded);
 	} catch (e) {
 		console.error('Failed to encode to base64:', e);
+		const t: ToastSettings = {
+			message: `Failed to encode to base64: ${e}`,
+			// Provide any utility or variant background style:
+			background: 'variant-filled-error',
+			timeout: 5000
+		};
+		toastStore.trigger(t);
 	}
 }
 
@@ -48,5 +56,12 @@ export function fromBase64(encoded: string) {
 		originalText.set(decoded);
 	} catch (e) {
 		console.error('Failed to decode from base64:', e);
+		const t: ToastSettings = {
+			message: `Failed to decode from base64: ${e}`,
+			// Provide any utility or variant background style:
+			background: 'variant-filled-error',
+			timeout: 5000
+		};
+		toastStore.trigger(t);
 	}
 }

@@ -5,7 +5,7 @@
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
 	// Most of your app wide CSS should be put in this file
 	import '../app.postcss';
-	import { AppShell, AppBar, Drawer, drawerStore, Modal } from '@skeletonlabs/skeleton';
+	import { AppShell, AppBar, Drawer, drawerStore, Modal, Toast } from '@skeletonlabs/skeleton';
 	import Bars3 from '$lib/components/icons/Bars3.svelte';
 	import MainMenu from '$lib/components/MainMenu.svelte';
 
@@ -23,6 +23,8 @@
 	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 	{@html webManifestLink}
 </svelte:head>
+
+<Toast position="bl" max={4} padding="p-3" />
 
 <Modal />
 

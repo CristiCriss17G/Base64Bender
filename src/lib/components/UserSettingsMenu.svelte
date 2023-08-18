@@ -19,8 +19,6 @@
 	// We've created a custom submit function to pass the response and close the modal.
 	function onFormSubmit(): void {
 		if ($modalStore[0].response) $modalStore[0].response(formData);
-		console.error(typeof parent);
-		console.error(parent);
 		userSettings.set(formData);
 		modalStore.close();
 	}
@@ -48,6 +46,8 @@
 				</div>
 			</aside>
 		</form>
+
+		<slot />
 
 		<footer class="modal-footer {parent.regionFooter}">
 			<button class="btn {parent.buttonNeutral}" on:click={parent.onClose}
