@@ -8,7 +8,10 @@
 	export let textareaId: string;
 	export let zoneType: string;
 	export let lockFunction: () => boolean;
+	export let valueChanger: (value: string) => void;
+
 	let lockState = false;
+	let isDragging: boolean = false;
 
 	const clipboardCopied = () => {
 		const t: ToastSettings = {
@@ -29,7 +32,51 @@
 		};
 		toastStore.trigger(t);
 	};
+
+	// file upload
+	let file: File | null = null;
+	function processFiles(files: FileList) {
+		if (files && files.length > 0) {
+			file = files[0];
+			console.log(file);
+			const reader = new FileReader();
+
+			reader.onload = (e) => {
+				valueChanger(e.target?.result as string);
+			};
+
+			reader.readAsText(file);
+		}
+	}
+
+	function handleFileChange(event: Event) {
+		console.log(typeof event);
+		const input = event.target as HTMLInputElement;
+		if (input.files && input.files.length > 0) {
+			processFiles(input.files);
+		}
+	}
+
+	function handleDrop(event: DragEvent) {
+		event.preventDefault();
+		isDragging = false;
+		if (event.dataTransfer && event.dataTransfer.files) {
+			processFiles(event.dataTransfer.files);
+		}
+	}
+
+	function handleDragOver(event: DragEvent) {
+		event.preventDefault();
+		isDragging = true;
+	}
+
+	function handleDragLeave(event: DragEvent) {
+		event.preventDefault();
+		isDragging = false;
+	}
 </script>
+
+<slot name="textareaControls" {handleDrop} {handleDragOver} {handleDragLeave} {isDragging} />
 
 <div class="input-group input-group-divider grid-cols-[auto_auto] mt-2">
 	<button
@@ -55,6 +102,25 @@
 		{/if}
 	</button>
 </div>
+
+<div class="mt-2 flex flex-col md:flex-row gap-2">
+	<input class="input" type="file" on:change={handleFileChange} />
+	<div class="input-group input-group-divider grid-cols-[auto_auto]">
+		<button
+			class="btn-control variant-filled-primary"
+			title="Lock the textarea"
+			on:click={() => {
+				lockState = lockFunction();
+				textareaLocked();
+			}}
+		>
+			Download
+		</button>
+		<input type="text" placeholder="filename.txt" />
+	</div>
+</div>
+
+<slot name="additionalControls" />
 
 <style lang="postcss">
 	.btn-control {
