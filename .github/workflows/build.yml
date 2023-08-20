@@ -118,9 +118,9 @@ jobs:
       - name: Upload Release
         uses: ncipollo/release-action@v1.12.0
         with:
-          artifacts: ${{ github.event.repository.name }}.zip
+          artifacts: build/${{ github.event.repository.name }}.zip
           token: ${{ secrets.GITHUB_TOKEN }}
-          bodyFile: readme.txt
+          bodyFile: README.md
           tag: ${{ github.event.repository.name }}-${{ github.sha }}-${{ github.run_number }}
           makeLatest: true
           name: ${{ github.event.repository.name }}
