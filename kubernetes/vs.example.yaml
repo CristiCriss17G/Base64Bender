@@ -1,0 +1,19 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: base64bender
+  namespace: istio-services
+spec:
+  gateways:
+    - tech-gateway
+  hosts:
+    - base64bender.tech
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: base64bender-service.base64bender.svc.cluster.local
+            port:
+              number: 80
