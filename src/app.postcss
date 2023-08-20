@@ -9,3 +9,17 @@ body {
 	src: url('/fonts/Quicksand.ttf');
 	font-display: swap;
 }
+
+@font-face {
+	font-family: 'Fira Code';
+	src: url('/fonts/FiraCode.ttf');
+	font-display: swap;
+}
+
+.main-textarea {
+	@apply h-[50vh] w-full my-5 text-sm;
+
+	&.as-code {
+		font-family: 'Fira Code', monospace;
+	}
+}

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: base64bender-service
+  namespace: base64bender
+  labels:
+    app: b64b
+spec:
+  selector:
+    app: b64b
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
