@@ -13,22 +13,18 @@ const defaultSettings: UserSettings = {
 export function checkOrUpdateUserSettings(userSettingsParam: UserSettings) {
 	const settings = get(userSettings);
 	if (settings.theme !== userSettingsParam.theme) {
-		console.warn('Updating user settings');
 		userSettings.update((settings) => ({ ...settings, theme: userSettingsParam.theme }));
 	}
 	if (settings.isUrlSafe !== userSettingsParam.isUrlSafe) {
-		console.warn('Updating user settings');
 		userSettings.update((settings) => ({ ...settings, isUrlSafe: userSettingsParam.isUrlSafe }));
 	}
 	if (settings.splitMarker !== userSettingsParam.splitMarker) {
-		console.warn('Updating user settings');
 		userSettings.update((settings) => ({
 			...settings,
 			splitMarker: userSettingsParam.splitMarker
 		}));
 	}
 	if (settings.rightClickPaste !== userSettingsParam.rightClickPaste) {
-		console.warn('Updating user settings');
 		userSettings.update((settings) => ({
 			...settings,
 			rightClickPaste: userSettingsParam.rightClickPaste

@@ -1,7 +1,17 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import Base64Encoder from '$lib/components/Base64Encoder.svelte';
 	import Base64Decoder from '$lib/components/Base64Decoder.svelte';
 	import { originalText, base64Text, fromBase64, toBase64 } from '$lib/stores/base64stores';
+
+	onMount(() => {
+		window.addEventListener('dragover', (e: DragEvent) => e.preventDefault());
+		window.addEventListener('drop', (e: DragEvent) => e.preventDefault());
+		return () => {
+			window.removeEventListener('dragover', (e: DragEvent) => e.preventDefault());
+			window.removeEventListener('drop', (e: DragEvent) => e.preventDefault());
+		};
+	});
 </script>
 
 <svelte:head>
@@ -14,13 +24,13 @@
 
 <div class="main-container">
 	<section class="main-column">
-		<h2 class="h2">Base64 Encoder</h2>
-		<Base64Encoder value={base64Text} base64EncoderFunction={fromBase64} />
+		<h2 class="h2">Base64 Decoder</h2>
+		<Base64Decoder value={base64Text} base64DecoderFunction={fromBase64} />
 	</section>
 	<hr class="!border-t-4 border-slate-500 divider w-11/12 mx-auto md:hidden" />
 	<section class="main-column">
-		<h2 class="h2">Base64 Decoder</h2>
-		<Base64Decoder value={originalText} base64DecoderFunction={toBase64} />
+		<h2 class="h2">Base64 Encoder</h2>
+		<Base64Encoder value={originalText} base64EncoderFunction={toBase64} />
 	</section>
 </div>
 

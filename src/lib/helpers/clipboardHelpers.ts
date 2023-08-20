@@ -1,4 +1,5 @@
 import { userSettings } from '$lib/stores/userSettings';
+import { toastStore, type ToastSettings } from '@skeletonlabs/skeleton';
 import { get } from 'svelte/store';
 
 export async function getClipboardContent(): Promise<string> {
@@ -11,6 +12,13 @@ export async function getClipboardContent(): Promise<string> {
 		}
 	} catch (err) {
 		console.error('Could not read from clipboard:', err);
+		const t: ToastSettings = {
+			message: `Could not read from clipboard: ${err}`,
+			// Provide any utility or variant background style:
+			background: 'variant-filled-error',
+			timeout: 2000
+		};
+		toastStore.trigger(t);
 	}
 	return '';
 }

@@ -8,6 +8,7 @@
 	import { AppShell, AppBar, Drawer, drawerStore, Modal, Toast } from '@skeletonlabs/skeleton';
 	import Bars3 from '$lib/components/icons/Bars3.svelte';
 	import MainMenu from '$lib/components/MainMenu.svelte';
+	import Base64Bender from '$lib/components/icons/Base64Bender.svelte';
 
 	import { pwaInfo } from 'virtual:pwa-info';
 	import MediaQuery from '$lib/components/MediaQuery.svelte';
@@ -38,6 +39,7 @@
 		<!-- App Bar -->
 		<AppBar>
 			<svelte:fragment slot="lead">
+				<Base64Bender sizeClasses="w-10 h-10" />
 				<strong class="text-xl uppercase">Base64Bender</strong>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">

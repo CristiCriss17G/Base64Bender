@@ -26,7 +26,6 @@ export function toBase64(str: string) {
 		}
 		base64Text.set(encoded);
 	} catch (e) {
-		console.error('Failed to encode to base64:', e);
 		const t: ToastSettings = {
 			message: `Failed to encode to base64: ${e}`,
 			// Provide any utility or variant background style:
@@ -55,7 +54,6 @@ export function fromBase64(encoded: string) {
 		);
 		originalText.set(decoded);
 	} catch (e) {
-		console.error('Failed to decode from base64:', e);
 		const t: ToastSettings = {
 			message: `Failed to decode from base64: ${e}`,
 			// Provide any utility or variant background style:
