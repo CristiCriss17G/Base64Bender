@@ -1,14 +1,26 @@
 <script lang="ts">
-	// The ordering of these imports is critical to your app working properly
-	import '@skeletonlabs/skeleton/themes/theme-modern.css';
-	// If you have source.organizeImports set to true in VSCode, then it will auto change this ordering
-	import '@skeletonlabs/skeleton/styles/skeleton.css';
+	// // The ordering of these imports is critical to your app working properly
+	// import '@skeletonlabs/skeleton/themes/theme-modern.css';
+	// // If you have source.organizeImports set to true in VSCode, then it will auto change this ordering
+	// import '@skeletonlabs/skeleton/styles/skeleton.css';
 	// Most of your app wide CSS should be put in this file
 	import '../app.postcss';
-	import { AppShell, AppBar, Drawer, drawerStore, Modal, Toast } from '@skeletonlabs/skeleton';
+	import {
+		initializeStores,
+		AppShell,
+		AppBar,
+		Drawer,
+		getDrawerStore,
+		Modal,
+		Toast
+	} from '@skeletonlabs/skeleton';
 	import Bars3 from '$lib/components/icons/Bars3.svelte';
 	import MainMenu from '$lib/components/MainMenu.svelte';
 	import Base64Bender from '$lib/components/icons/Base64Bender.svelte';
+
+	initializeStores();
+
+	const drawerStore = getDrawerStore();
 
 	import { pwaInfo } from 'virtual:pwa-info';
 	import MediaQuery from '$lib/components/MediaQuery.svelte';

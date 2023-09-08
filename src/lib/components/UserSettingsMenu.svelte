@@ -10,8 +10,10 @@
 	import { get } from 'svelte/store';
 
 	// Stores
-	import { SlideToggle, modalStore } from '@skeletonlabs/skeleton';
+	import { SlideToggle, getModalStore } from '@skeletonlabs/skeleton';
 	import { userSettings } from '$lib/stores/userSettings';
+
+	const modalStore = getModalStore();
 
 	// Form Data
 	const formData: UserSettings = get(userSettings);

@@ -4,7 +4,7 @@
 	import LockOpenIcon from './icons/LockOpenIcon.svelte';
 	import ClipboardDocumentListIcon from './icons/ClipboardDocumentListIcon.svelte';
 	import DocumentMinus from './icons/DocumentMinus.svelte';
-	import { toastStore, type ToastSettings } from '@skeletonlabs/skeleton';
+	import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
 
 	export let textareaId: string;
 	export let zoneType: string;
@@ -12,6 +12,7 @@
 	export let valueChanger: (value: string) => void;
 	export let textValue: string;
 
+	const toastStore = getToastStore();
 	let lockState = false;
 	let isDragging: boolean = false;
 	const fileDropClasses: string = 'outline-4 outline-dashed';
