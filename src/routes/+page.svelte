@@ -2,7 +2,12 @@
 	import { onMount } from 'svelte';
 	import Base64Encoder from '$lib/components/Base64Encoder.svelte';
 	import Base64Decoder from '$lib/components/Base64Decoder.svelte';
-	import { originalText, base64Text, fromBase64, toBase64 } from '$lib/stores/base64stores';
+	import { originalText, base64Text, initializeUserSettingsUpdate } from '$lib/stores/base64stores';
+	import { getToastStore } from '@skeletonlabs/skeleton';
+
+	const toastStore = getToastStore();
+
+	const { toBase64, fromBase64 } = initializeUserSettingsUpdate(toastStore);
 
 	onMount(() => {
 		window.addEventListener('dragover', (e: DragEvent) => e.preventDefault());

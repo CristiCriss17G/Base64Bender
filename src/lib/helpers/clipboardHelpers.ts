@@ -1,8 +1,8 @@
 import { userSettings } from '$lib/stores/userSettings';
-import { toastStore, type ToastSettings } from '@skeletonlabs/skeleton';
+import type { ToastSettings, ToastStore } from '@skeletonlabs/skeleton';
 import { get } from 'svelte/store';
 
-export async function getClipboardContent(): Promise<string> {
+export async function getClipboardContent(toastStore: ToastStore): Promise<string> {
 	try {
 		const permissionStatus: PermissionStatus = await navigator.permissions.query({
 			name: 'clipboard-read'
@@ -24,6 +24,7 @@ export async function getClipboardContent(): Promise<string> {
 }
 
 export function initRightClickClipboardAction(
+	toastStore: ToastStore,
 	textarea: HTMLTextAreaElement | null,
 	valueChanger: (value: string) => void,
 	additionalCheck: () => boolean = () => false
@@ -39,7 +40,7 @@ export function initRightClickClipboardAction(
 
 		if (rightClickCount === 1) {
 			e.preventDefault();
-			const clipboardContent: string = await getClipboardContent();
+			const clipboardContent: string = await getClipboardContent(toastStore);
 			if (clipboardContent) {
 				valueChanger(clipboardContent);
 			}

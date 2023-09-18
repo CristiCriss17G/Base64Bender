@@ -19,7 +19,7 @@ jobs:
           cache: 'npm'
 
       - name: Update npm
-        run: npm install -g npm@~9.x.x
+        run: npm install -g npm@~10.x.x
 
       - name: Install npm dependencies
         run: npm ci

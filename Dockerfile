@@ -13,7 +13,7 @@ FROM node:${NODE_VERSION}-alpine as base
 # Set working directory for all build stages.
 WORKDIR /usr/src/app
 
-RUN npm install -g npm@~9.x.x
+RUN npm install -g npm@~10.x.x
 
 ################################################################################
 # Create a stage for building the application.
