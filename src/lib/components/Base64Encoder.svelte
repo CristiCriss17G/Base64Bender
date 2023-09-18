@@ -3,11 +3,14 @@
 	import type { Writable } from 'svelte/store';
 	import { userSettings } from '$lib/stores/userSettings';
 	import { initRightClickClipboardAction } from '$lib/helpers/clipboardHelpers';
+	import { getToastStore } from '@skeletonlabs/skeleton';
 	import DefaultBase64Controls from './DefaultBase64Controls.svelte';
 	import DocumentArrowUp from './icons/DocumentArrowUp.svelte';
 
 	export let value: Writable<string>;
 	export let base64EncoderFunction: (value: string) => void;
+
+	const toastStore = getToastStore();
 
 	const textareaId: string = 'base64decoded';
 
@@ -32,9 +35,9 @@
 	onMount(() => {
 		const textarea = document.getElementById(textareaId) as HTMLTextAreaElement;
 		userSettings.subscribe(() => {
-			initRightClickClipboardAction(textarea, valueChanger, additionalCheck);
+			initRightClickClipboardAction(toastStore, textarea, valueChanger, additionalCheck);
 		});
-		return initRightClickClipboardAction(textarea, valueChanger, additionalCheck);
+		return initRightClickClipboardAction(toastStore, textarea, valueChanger, additionalCheck);
 	});
 </script>
 

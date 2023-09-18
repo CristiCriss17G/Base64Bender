@@ -1,9 +1,11 @@
 <script lang="ts">
-	import { LightSwitch, modalStore } from '@skeletonlabs/skeleton';
+	import { LightSwitch, getModalStore } from '@skeletonlabs/skeleton';
 	import { modal } from '$lib/helpers/userSettingsModal';
 	import Cog6Tooth from './icons/Cog6Tooth.svelte';
 
 	export let isMobile = false;
+
+	const modalStore = getModalStore();
 
 	const openSettingsMenu = () => {
 		modalStore.trigger(modal);
