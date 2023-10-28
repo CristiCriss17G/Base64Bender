@@ -22,10 +22,10 @@
 
 	const drawerStore = getDrawerStore();
 
-	import { pwaInfo } from 'virtual:pwa-info';
 	import MediaQuery from '$lib/components/MediaQuery.svelte';
+	import { pwaInfo } from 'virtual:pwa-info';
 
-	$: webManifestLink = pwaInfo ? pwaInfo.webManifest.linkTag : '';
+	$: webManifestLink = pwaInfo ? pwaInfo.webManifest.linkTag.replace('href="/', 'href="./') : '';
 
 	function drawerOpen() {
 		drawerStore.open();
