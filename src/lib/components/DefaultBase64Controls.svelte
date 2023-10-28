@@ -173,11 +173,7 @@
 <div class="mt-2 flex flex-col md:flex-row gap-2">
 	<input class="input" type="file" on:change={handleFileChange} />
 	<div class="input-group input-group-divider grid-cols-[auto_auto]">
-		<button
-			class="btn-control variant-filled-primary"
-			title="Lock the textarea"
-			on:click={saveToFile}
-		>
+		<button class="btn-control variant-filled-primary" title="Save to file" on:click={saveToFile}>
 			Download
 		</button>
 		<input type="text" placeholder="filename.txt" bind:value={downloadFilename} />
