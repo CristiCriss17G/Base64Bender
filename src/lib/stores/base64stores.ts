@@ -9,15 +9,12 @@ export const base64Text = writable('');
 
 const hasInitializedUserSettingsUpdate = false;
 
-// let initializedTostStore: ToastStore;
 let initializedToBase64: (str: string) => void;
 let initializedFromBase64: (encoded: string) => void;
 
 export const initializeUserSettingsUpdate = (toastStore: ToastStore): Base64Utilities => {
 	if (hasInitializedUserSettingsUpdate)
 		return { toBase64: initializedToBase64, fromBase64: initializedFromBase64 };
-
-	// initializedTostStore = toastStore;
 
 	userSettings.subscribe(() => {
 		toBase64(get(originalText));
@@ -52,7 +49,7 @@ export const initializeUserSettingsUpdate = (toastStore: ToastStore): Base64Util
 	function fromBase64(encoded: string) {
 		try {
 			// Detect URL-safe characters
-			if (/-|_/.test(encoded)) {
+			if (/[-_]/.test(encoded)) {
 				const newUserSettings = { ...get(userSettings), isUrlSafe: true };
 				checkOrUpdateUserSettings(newUserSettings);
 				encoded = encoded.replace(/-/g, '+').replace(/_/g, '/');

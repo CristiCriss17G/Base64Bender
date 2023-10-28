@@ -20,7 +20,6 @@
 </script>
 
 <svelte:head>
-	<title>Base64Bender - Base 64 Encoder and Decoder</title>
 	<meta name="description" content="Base 64 Encoder and decoder" />
 	<meta name="keywords" content="base64, encoder, decoder, base64bender" />
 	<meta name="author" content="Base64Bender" />
