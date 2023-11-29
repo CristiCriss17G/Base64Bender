@@ -4,11 +4,13 @@
 # If you need more help, visit the Dockerfile reference guide at
 # https://docs.docker.com/engine/reference/builder/
 
-ARG NODE_VERSION=20.9.0
+ARG NODE_VERSION=20.10.0
 
 ################################################################################
 # Use node image for base image for all stages.
-FROM node:${NODE_VERSION}-alpine as base
+FROM node:${NODE_VERSION}-alpine AS base
+
+RUN apk update && apk --no-cache upgrade && rm -rf /var/cache/apk/*
 
 # Set working directory for all build stages.
 WORKDIR /usr/src/app
@@ -17,7 +19,7 @@ RUN npm install -g npm@~10.x.x
 
 ################################################################################
 # Create a stage for building the application.
-FROM base as build
+FROM base AS build
 
 # Download additional development dependencies before building, as some projects require
 # "devDependencies" to be installed to build. If you don't need this, remove this step.
@@ -40,7 +42,9 @@ RUN npm run build
 # Create a new stage to run the application with minimal runtime dependencies
 # where the necessary files are copied from the build stage.
 # Use nginx image to serve the static site
-FROM nginx:alpine as runtime
+FROM nginx:alpine AS runtime
+
+RUN apk update && apk --no-cache upgrade && rm -rf /var/cache/apk/*
 
 # Copy the static assets from the build image
 COPY --from=build /usr/src/app/build /usr/share/nginx/html

@@ -20,9 +20,9 @@
 
 	const clipboardCopied = () => {
 		const t: ToastSettings = {
-			message: `Copied ${zoneType} text to clipboard!`,
 			// Provide any utility or variant background style:
 			background: 'variant-filled-success',
+			message: `Copied ${zoneType} text to clipboard!`,
 			timeout: 2000
 		};
 		toastStore.trigger(t);
@@ -30,9 +30,9 @@
 
 	const textareaLocked = () => {
 		const t: ToastSettings = {
-			message: `${zoneType} textarea is ${lockState ? 'locked' : 'unlocked'}!`,
 			// Provide any utility or variant background style:
 			background: 'variant-filled-success',
+			message: `${zoneType} textarea is ${lockState ? 'locked' : 'unlocked'}!`,
 			timeout: 2000
 		};
 		toastStore.trigger(t);
@@ -56,9 +56,9 @@
 			file = files[0];
 			if (!isValidFileExtension(file.name)) {
 				const t: ToastSettings = {
-					message: `Invalid file type!<br />Allowed file types: ${allowedExtensions.join(', ')}`,
 					// Provide any utility or variant background style:
 					background: 'variant-filled-error',
+					message: `Invalid file type!<br />Allowed file types: ${allowedExtensions.join(', ')}`,
 					timeout: 3000
 				};
 				toastStore.trigger(t);
@@ -70,9 +70,9 @@
 				const data = e.target?.result as string;
 				if (isBinary(data)) {
 					const t: ToastSettings = {
-						message: `Binary file detected!`,
 						// Provide any utility or variant background style:
 						background: 'variant-filled-error',
+						message: `Binary file detected!`,
 						timeout: 2000
 					};
 					toastStore.trigger(t);

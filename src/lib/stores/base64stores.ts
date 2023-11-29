@@ -14,7 +14,7 @@ let initializedFromBase64: (encoded: string) => void;
 
 export const initializeUserSettingsUpdate = (toastStore: ToastStore): Base64Utilities => {
 	if (hasInitializedUserSettingsUpdate)
-		return { toBase64: initializedToBase64, fromBase64: initializedFromBase64 };
+		return { fromBase64: initializedFromBase64, toBase64: initializedToBase64 };
 
 	userSettings.subscribe(() => {
 		toBase64(get(originalText));
@@ -37,9 +37,9 @@ export const initializeUserSettingsUpdate = (toastStore: ToastStore): Base64Util
 			base64Text.set(encoded);
 		} catch (e) {
 			const t: ToastSettings = {
-				message: `Failed to encode to base64: ${e}`,
 				// Provide any utility or variant background style:
 				background: 'variant-filled-error',
+				message: `Failed to encode to base64: ${e}`,
 				timeout: 5000
 			};
 			toastStore.trigger(t);
@@ -65,9 +65,9 @@ export const initializeUserSettingsUpdate = (toastStore: ToastStore): Base64Util
 			originalText.set(decoded);
 		} catch (e) {
 			const t: ToastSettings = {
-				message: `Failed to decode from base64: ${e}`,
 				// Provide any utility or variant background style:
 				background: 'variant-filled-error',
+				message: `Failed to decode from base64: ${e}`,
 				timeout: 5000
 			};
 			toastStore.trigger(t);
@@ -77,5 +77,5 @@ export const initializeUserSettingsUpdate = (toastStore: ToastStore): Base64Util
 	initializedToBase64 = toBase64;
 	initializedFromBase64 = fromBase64;
 
-	return { toBase64, fromBase64 };
+	return { fromBase64, toBase64 };
 };
