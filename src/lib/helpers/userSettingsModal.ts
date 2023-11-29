@@ -7,8 +7,8 @@ export const modalComponent: ModalComponent = {
 };
 
 export const modal: ModalSettings = {
-	type: 'component',
-	title: 'User Settings',
 	// Pass the component directly:
-	component: modalComponent
+	component: modalComponent,
+	title: 'User Settings',
+	type: 'component'
 };

@@ -4,10 +4,10 @@ import type { UserSettings } from '$lib/types/userSettings';
 import type { Writable } from 'svelte/store';
 
 const defaultSettings: UserSettings = {
-	theme: 'light',
 	isUrlSafe: false,
+	rightClickPaste: false,
 	splitMarker: 0,
-	rightClickPaste: false
+	theme: 'light'
 };
 
 export function checkOrUpdateUserSettings(userSettingsParam: UserSettings) {
