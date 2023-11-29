@@ -13,9 +13,9 @@ export async function getClipboardContent(toastStore: ToastStore): Promise<strin
 	} catch (err) {
 		console.error('Could not read from clipboard:', err);
 		const t: ToastSettings = {
-			message: `Could not read from clipboard: ${err}`,
 			// Provide any utility or variant background style:
 			background: 'variant-filled-error',
+			message: `Could not read from clipboard: ${err}`,
 			timeout: 2000
 		};
 		toastStore.trigger(t);

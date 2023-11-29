@@ -7,7 +7,7 @@
 
 	const toastStore = getToastStore();
 
-	const { toBase64, fromBase64 } = initializeUserSettingsUpdate(toastStore);
+	const { fromBase64, toBase64 } = initializeUserSettingsUpdate(toastStore);
 
 	onMount(() => {
 		window.addEventListener('dragover', (e: DragEvent) => e.preventDefault());
