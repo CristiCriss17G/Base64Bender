@@ -134,4 +134,4 @@ jobs:
           bodyFile: README.md
           tag: ${{ steps.version.outputs.RELEASE_VERSION }}
           makeLatest: true
-          name: ${{ github.event.repository.name }}
+          name: ${{ github.event.repository.name }}-v${{ steps.version.outputs.RELEASE_VERSION }}
