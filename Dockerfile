@@ -4,7 +4,7 @@
 # If you need more help, visit the Dockerfile reference guide at
 # https://docs.docker.com/engine/reference/builder/
 
-ARG NODE_VERSION=20.11.0
+ARG NODE_VERSION=20.12
 
 ################################################################################
 # Use node image for base image for all stages.
@@ -15,20 +15,14 @@ RUN apk update && apk --no-cache upgrade && rm -rf /var/cache/apk/*
 # Set working directory for all build stages.
 WORKDIR /usr/src/app
 
-RUN npm install -g npm@~10.x.x
+RUN npm install -g npm@~10.x.x pnpm@~9.x.x
 
 ################################################################################
 # Create a stage for building the application.
 FROM base AS build
 
-# Download additional development dependencies before building, as some projects require
-# "devDependencies" to be installed to build. If you don't need this, remove this step.
-# RUN --mount=type=bind,source=package.json,target=package.json \
-#     --mount=type=bind,source=package-lock.json,target=package-lock.json \
-#     --mount=type=cache,target=/root/.npm \
-#     npm ci
-COPY package.json package-lock.json ./
-RUN npm ci
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
 # Copy the rest of the source files into the image.
 COPY . .
@@ -36,7 +30,7 @@ COPY . .
 ENV NODE_ENV=production
 
 # Run the build script.
-RUN npm run build
+RUN pnpm run build
 
 FROM nginx:1.25-alpine AS brotli
 
