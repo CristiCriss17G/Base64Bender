@@ -17,6 +17,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v3
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -24,7 +27,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Update npm
-        run: npm install -g npm@~10.x.x pnpm@~9.x.x
+        run: npm install -g npm@~10.x.x
 
       - name: Install npm dependencies
         run: pnpm install --frozen-lockfile
@@ -100,6 +103,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v3
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -111,7 +117,7 @@ jobs:
         run: echo "RELEASE_VERSION=v$(cat package.json | jq -r .version)" >> $GITHUB_OUTPUT
 
       - name: Update npm
-        run: npm install -g npm@~10.x.x pnpm@~9.x.x
+        run: npm install -g npm@~10.x.x
 
       - name: Install npm dependencies
         run: pnpm install --frozen-lockfile
