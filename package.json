@@ -47,9 +47,6 @@
 		"vite-plugin-tailwind-purgecss": "^0.3.3",
 		"vitest": "^2.0.2"
 	},
-	"overrides": {
-		"@rollup/plugin-node-resolve": "^15.2.3"
-	},
 	"type": "module",
 	"engines": {
 		"pnpm": "^9.0.0",
