@@ -47,7 +47,9 @@
 			additionalCheck
 		);
 		return () => {
-			rightClickEventRemove ? rightClickEventRemove() : null;
+			if (rightClickEventRemove) {
+				rightClickEventRemove();
+			}
 		};
 	});
 </script>

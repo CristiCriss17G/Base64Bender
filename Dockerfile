@@ -4,7 +4,7 @@
 # If you need more help, visit the Dockerfile reference guide at
 # https://docs.docker.com/engine/reference/builder/
 
-ARG NODE_VERSION=20.12
+ARG NODE_VERSION=20
 
 ################################################################################
 # Use node image for base image for all stages.
@@ -32,7 +32,7 @@ ENV NODE_ENV=production
 # Run the build script.
 RUN pnpm run build
 
-FROM nginx:1.25-alpine AS brotli
+FROM nginx:1.27-alpine AS brotli
 
 RUN apk update && apk --no-cache upgrade && apk add --no-cache bash brotli wget tar build-base cmake pcre-dev zlib-dev git && rm -rf /var/cache/apk/*
 SHELL ["/bin/bash", "-c"]
@@ -55,7 +55,7 @@ RUN make modules
 # Create a new stage to run the application with minimal runtime dependencies
 # where the necessary files are copied from the build stage.
 # Use nginx image to serve the static site
-FROM nginx:1.25-alpine AS runtime
+FROM nginx:1.27-alpine AS runtime
 
 RUN apk update && apk --no-cache upgrade && rm -rf /var/cache/apk/*
 
