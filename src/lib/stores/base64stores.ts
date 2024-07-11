@@ -2,6 +2,7 @@ import { writable, get } from 'svelte/store';
 import { userSettings, checkOrUpdateUserSettings } from './userSettings';
 import type { ToastSettings, ToastStore } from '@skeletonlabs/skeleton';
 import type { Base64Utilities } from '$lib/types/base64Utilities';
+import type { UserSettings } from '$lib/types/userSettings';
 
 // These stores will hold the values of the textareas.
 export const originalText = writable('');
@@ -49,13 +50,12 @@ export const initializeUserSettingsUpdate = (toastStore: ToastStore): Base64Util
 	function fromBase64(encoded: string) {
 		try {
 			// Detect URL-safe characters
+			let newUserSettings: UserSettings | undefined;
 			if (/[-_]/.test(encoded)) {
-				const newUserSettings = { ...get(userSettings), isUrlSafe: true };
-				checkOrUpdateUserSettings(newUserSettings);
+				newUserSettings = { ...get(userSettings), isUrlSafe: true };
 				encoded = encoded.replace(/-/g, '+').replace(/_/g, '/');
-			} else {
-				const newUserSettings = { ...get(userSettings), isUrlSafe: false };
-				checkOrUpdateUserSettings(newUserSettings);
+			} else if (/[+/]/.test(encoded) && get(userSettings).isUrlSafe) {
+				newUserSettings = { ...get(userSettings), isUrlSafe: false };
 			}
 			const decoded = decodeURIComponent(
 				Array.prototype.map
@@ -63,6 +63,9 @@ export const initializeUserSettingsUpdate = (toastStore: ToastStore): Base64Util
 					.join('')
 			);
 			originalText.set(decoded);
+			if (newUserSettings) {
+				checkOrUpdateUserSettings(newUserSettings);
+			}
 		} catch (e) {
 			const t: ToastSettings = {
 				// Provide any utility or variant background style:
