@@ -1,8 +1,10 @@
-import { writable, get } from 'svelte/store';
-import { userSettings, checkOrUpdateUserSettings } from './userSettings';
 import type { ToastSettings, ToastStore } from '@skeletonlabs/skeleton';
 import type { Base64Utilities } from '$lib/types/base64Utilities';
 import type { UserSettings } from '$lib/types/userSettings';
+
+import { writable, get } from 'svelte/store';
+
+import { userSettings, checkOrUpdateUserSettings } from './userSettings';
 
 // These stores will hold the values of the textareas.
 export const originalText = writable('');

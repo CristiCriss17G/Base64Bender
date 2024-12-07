@@ -2,15 +2,13 @@
 	// Props
 	/** Exposes parent props to this component. */
 	import type { ModalProps } from '@skeletonlabs/skeleton/dist/utilities/Modal/Modal.svelte';
-
 	// Types
 	import type { UserSettings } from '$lib/types/userSettings';
-
-	import { get } from 'svelte/store';
 
 	// Stores
 	import { SlideToggle, getModalStore } from '@skeletonlabs/skeleton';
 	import { userSettings } from '$lib/stores/userSettings';
+	import { get } from 'svelte/store';
 	interface Props {
 		parent: ModalProps;
 		children?: import('svelte').Snippet;

@@ -1,5 +1,6 @@
-import { userSettings } from '$lib/stores/userSettings';
 import type { ToastSettings, ToastStore } from '@skeletonlabs/skeleton';
+
+import { userSettings } from '$lib/stores/userSettings';
 import { get } from 'svelte/store';
 
 export async function getClipboardContent(toastStore: ToastStore): Promise<string> {

@@ -1,13 +1,15 @@
-import { localStorageStore } from '@skeletonlabs/skeleton';
-import { get } from 'svelte/store';
 import type { UserSettings } from '$lib/types/userSettings';
 import type { Writable } from 'svelte/store';
+
+import { persisted } from 'svelte-persisted-store';
+import { get } from 'svelte/store';
 
 const defaultSettings: UserSettings = {
 	isUrlSafe: false,
 	rightClickPaste: false,
 	splitMarker: 0,
-	theme: 'light'
+	theme: 'light',
+	colorTheme: 'modern'
 };
 
 export function checkOrUpdateUserSettings(userSettingsParam: UserSettings) {
@@ -32,7 +34,7 @@ export function checkOrUpdateUserSettings(userSettingsParam: UserSettings) {
 	}
 }
 
-export const userSettings: Writable<UserSettings> = localStorageStore<UserSettings>(
+export const userSettings: Writable<UserSettings> = persisted<UserSettings>(
 	'userSettings',
 	defaultSettings
 );
