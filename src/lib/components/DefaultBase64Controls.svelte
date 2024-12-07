@@ -1,10 +1,19 @@
 <script lang="ts">
 	import { clipboard } from '@skeletonlabs/skeleton';
-	import LockClosedIcon from './icons/LockClosedIcon.svelte';
-	import LockOpenIcon from './icons/LockOpenIcon.svelte';
+	import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
+
 	import ClipboardDocumentListIcon from './icons/ClipboardDocumentListIcon.svelte';
 	import DocumentMinus from './icons/DocumentMinus.svelte';
-	import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
+	import LockClosedIcon from './icons/LockClosedIcon.svelte';
+	import LockOpenIcon from './icons/LockOpenIcon.svelte';
+
+	interface TextAreaControlsProps {
+		handleDrop: (event: DragEvent) => void;
+		handleDragOver: (event: DragEvent) => void;
+		handleDragLeave: (event: DragEvent) => void;
+		isDragging: boolean;
+		fileDropClassesActive: string;
+	}
 
 	interface Props {
 		textareaId: string;
@@ -12,7 +21,7 @@
 		lockFunction: () => boolean;
 		valueChanger: (value: string) => void;
 		textValue: string;
-		textareaControls?: import('svelte').Snippet<[any]>;
+		textareaControls?: import('svelte').Snippet<[TextAreaControlsProps]>;
 		additionalControls?: import('svelte').Snippet;
 	}
 
@@ -53,7 +62,32 @@
 	};
 
 	// file upload
-	const allowedExtensions = ['.txt', '.json', '.yaml', '.yml'];
+	const allowedExtensions = [
+		'.txt',
+		'.json',
+		'.yaml',
+		'.yml',
+		'.xml',
+		'.csv',
+		'.html',
+		'.log',
+		'.md',
+		'.markdown',
+		'.pem',
+		'.crt',
+		'.key',
+		'.csr',
+		'.cer',
+		'.pfx',
+		'.p12',
+		'.der',
+		'.p7b',
+		'.p7c',
+		'.p7r',
+		'.p7m',
+		'.p7s',
+		'.p8'
+	];
 
 	function isValidFileExtension(filename: string): boolean {
 		const ext = '.' + filename.split('.').pop();
@@ -141,7 +175,13 @@
 	}
 </script>
 
-{@render textareaControls?.({ handleDrop, handleDragOver, handleDragLeave, isDragging, fileDropClassesActive, })}
+{@render textareaControls?.({
+	handleDrop,
+	handleDragOver,
+	handleDragLeave,
+	isDragging,
+	fileDropClassesActive
+})}
 
 <div class="input-group input-group-divider grid-cols-[auto_auto_auto] mt-2">
 	<button

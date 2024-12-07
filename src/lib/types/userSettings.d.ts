@@ -3,4 +3,7 @@ export type UserSettings = {
 	isUrlSafe: boolean;
 	splitMarker: number;
 	rightClickPaste: boolean;
+	colorTheme: 'crimson' | 'hamlindigo' | 'modern' | 'vintage' | 'wintry';
 };
+
+export type ColorTheme = UserSettings['colorTheme'];

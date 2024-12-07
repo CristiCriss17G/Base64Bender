@@ -46,6 +46,7 @@ export default defineConfig({
 			},
 			mode: (process.env.NODE_ENV as 'development' | 'production' | undefined) ?? 'development',
 			selfDestroying: process.env.SELF_DESTROYING_SW === 'true',
+			strategies: 'generateSW',
 			workbox: {
 				globPatterns: ['client/**/*.{js,css,ico,png,svg,webp,woff,woff2}']
 			}

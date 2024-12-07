@@ -1,11 +1,13 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { onMount } from 'svelte';
+
+	interface ChildrenProps {
+		matches: boolean;
+	}
 
 	interface Props {
 		query: string;
-		children?: import('svelte').Snippet<[any]>;
+		children?: import('svelte').Snippet<[ChildrenProps]>;
 	}
 
 	let { query, children }: Props = $props();
@@ -22,7 +24,6 @@
 		};
 	});
 
-
 	function addNewListener(query: string) {
 		mql = window.matchMedia(query);
 		mqlListener = (v) => (matches = v.matches);
@@ -35,7 +36,7 @@
 			mql.removeEventListener('change', mqlListener);
 		}
 	}
-	run(() => {
+	$effect(() => {
 		if (wasMounted) {
 			removeActiveListener();
 			addNewListener(query);
@@ -43,4 +44,4 @@
 	});
 </script>
 
-{@render children?.({ matches, })}
+{@render children?.({ matches })}
