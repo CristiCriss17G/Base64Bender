@@ -6,17 +6,31 @@
 	import DocumentMinus from './icons/DocumentMinus.svelte';
 	import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
 
-	export let textareaId: string;
-	export let zoneType: string;
-	export let lockFunction: () => boolean;
-	export let valueChanger: (value: string) => void;
-	export let textValue: string;
+	interface Props {
+		textareaId: string;
+		zoneType: string;
+		lockFunction: () => boolean;
+		valueChanger: (value: string) => void;
+		textValue: string;
+		textareaControls?: import('svelte').Snippet<[any]>;
+		additionalControls?: import('svelte').Snippet;
+	}
+
+	let {
+		textareaId,
+		zoneType,
+		lockFunction,
+		valueChanger,
+		textValue,
+		textareaControls,
+		additionalControls
+	}: Props = $props();
 
 	const toastStore = getToastStore();
-	let lockState = false;
-	let isDragging: boolean = false;
+	let lockState = $state(false);
+	let isDragging: boolean = $state(false);
 	const fileDropClasses: string = 'outline-4 outline-dashed';
-	let fileDropClassesActive: string = '';
+	let fileDropClassesActive: string = $state('');
 
 	const clipboardCopied = () => {
 		const t: ToastSettings = {
@@ -114,7 +128,7 @@
 	}
 
 	// save to file
-	let downloadFilename = '';
+	let downloadFilename = $state('');
 	function saveToFile() {
 		const normalizedText = textValue.replace(/\r\n/g, '\n');
 		const blob = new Blob([normalizedText], { type: 'text/plain' });
@@ -127,28 +141,21 @@
 	}
 </script>
 
-<slot
-	name="textareaControls"
-	{handleDrop}
-	{handleDragOver}
-	{handleDragLeave}
-	{isDragging}
-	{fileDropClassesActive}
-/>
+{@render textareaControls?.({ handleDrop, handleDragOver, handleDragLeave, isDragging, fileDropClassesActive, })}
 
 <div class="input-group input-group-divider grid-cols-[auto_auto_auto] mt-2">
 	<button
 		class="btn-control variant-filled-primary sep-border"
 		title="Copy to clipboard"
 		use:clipboard={{ input: textareaId }}
-		on:click={clipboardCopied}
+		onclick={clipboardCopied}
 	>
 		<ClipboardDocumentListIcon />
 	</button>
 	<button
 		class="btn-control variant-filled-primary sep-border"
 		title="Lock the textarea"
-		on:click={() => {
+		onclick={() => {
 			lockState = lockFunction();
 			textareaLocked();
 		}}
@@ -162,7 +169,7 @@
 	<button
 		class="btn-control variant-filled-primary"
 		title="Clear"
-		on:click={() => {
+		onclick={() => {
 			valueChanger('');
 		}}
 	>
@@ -171,16 +178,16 @@
 </div>
 
 <div class="mt-2 flex flex-col md:flex-row gap-2">
-	<input class="input" type="file" on:change={handleFileChange} />
+	<input class="input" type="file" onchange={handleFileChange} />
 	<div class="input-group input-group-divider grid-cols-[auto_auto]">
-		<button class="btn-control variant-filled-primary" title="Save to file" on:click={saveToFile}>
+		<button class="btn-control variant-filled-primary" title="Save to file" onclick={saveToFile}>
 			Download
 		</button>
 		<input type="text" placeholder="filename.txt" bind:value={downloadFilename} />
 	</div>
 </div>
 
-<slot name="additionalControls" />
+{@render additionalControls?.()}
 
 <style lang="postcss">
 	.btn-control {

@@ -3,7 +3,11 @@
 	import { modal } from '$lib/helpers/userSettingsModal';
 	import Cog6Tooth from './icons/Cog6Tooth.svelte';
 
-	export let isMobile = false;
+	interface Props {
+		isMobile?: boolean;
+	}
+
+	let { isMobile = false }: Props = $props();
 
 	const modalStore = getModalStore();
 
@@ -17,7 +21,7 @@
 		<LightSwitch />
 		<button
 			class="btn hover:rotate-45"
-			on:click={openSettingsMenu}
+			onclick={openSettingsMenu}
 			aria-label="Settings"
 			title="Settings"
 		>
@@ -36,7 +40,7 @@
 	<LightSwitch />
 	<button
 		class="btn hover:rotate-45"
-		on:click={openSettingsMenu}
+		onclick={openSettingsMenu}
 		aria-label="Settings"
 		title="Settings"
 	>
