@@ -2,7 +2,6 @@
 	// Props
 	/** Exposes parent props to this component. */
 	import type { ModalProps } from '@skeletonlabs/skeleton/dist/utilities/Modal/Modal.svelte';
-	export let parent: ModalProps;
 
 	// Types
 	import type { UserSettings } from '$lib/types/userSettings';
@@ -12,11 +11,17 @@
 	// Stores
 	import { SlideToggle, getModalStore } from '@skeletonlabs/skeleton';
 	import { userSettings } from '$lib/stores/userSettings';
+	interface Props {
+		parent: ModalProps;
+		children?: import('svelte').Snippet;
+	}
+
+	let { parent, children }: Props = $props();
 
 	const modalStore = getModalStore();
 
 	// Form Data
-	const formData: UserSettings = get(userSettings);
+	const formData: UserSettings = $state(get(userSettings));
 
 	// We've created a custom submit function to pass the response and close the modal.
 	function onFormSubmit(): void {
@@ -48,13 +53,13 @@
 			</aside>
 		</form>
 
-		<slot />
+		{@render children?.()}
 
 		<footer class="modal-footer {parent.regionFooter}">
-			<button class="btn {parent.buttonNeutral}" on:click={parent.onClose}
+			<button class="btn {parent.buttonNeutral}" onclick={parent.onClose}
 				>{parent.buttonTextCancel}</button
 			>
-			<button class="btn {parent.buttonPositive}" on:click={onFormSubmit}>Save</button>
+			<button class="btn {parent.buttonPositive}" onclick={onFormSubmit}>Save</button>
 		</footer>
 	</div>
 {/if}

@@ -24,8 +24,13 @@
 
 	import MediaQuery from '$lib/components/MediaQuery.svelte';
 	import { pwaInfo } from 'virtual:pwa-info';
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
 
-	$: webManifestLink = pwaInfo ? pwaInfo.webManifest.linkTag.replace('href="/', 'href="./') : '';
+	let { children }: Props = $props();
+
+	let webManifestLink = $derived(pwaInfo ? pwaInfo.webManifest.linkTag.replace('href="/', 'href="./') : '');
 
 	function drawerOpen() {
 		drawerStore.open();
@@ -47,26 +52,34 @@
 
 <!-- App Shell -->
 <AppShell>
-	<svelte:fragment slot="header">
-		<!-- App Bar -->
-		<AppBar>
-			<svelte:fragment slot="lead">
-				<Base64Bender sizeClasses="w-10 h-10" />
-				<strong class="text-xl uppercase">Base64Bender</strong>
-			</svelte:fragment>
-			<svelte:fragment slot="trail">
-				<MediaQuery query="(min-width: 768px)" let:matches>
-					{#if matches}
-						<MainMenu />
-					{:else}
-						<button class="md:hidden btn btn-sm mr-4" on:click={drawerOpen}>
-							<Bars3 />
-						</button>
-					{/if}
-				</MediaQuery>
-			</svelte:fragment>
-		</AppBar>
-	</svelte:fragment>
+	{#snippet header()}
+	
+			<!-- App Bar -->
+			<AppBar>
+				{#snippet lead()}
+					
+						<Base64Bender sizeClasses="w-10 h-10" />
+						<strong class="text-xl uppercase">Base64Bender</strong>
+					
+					{/snippet}
+				{#snippet trail()}
+					
+						<MediaQuery query="(min-width: 768px)" >
+							{#snippet children({ matches })}
+										{#if matches}
+									<MainMenu />
+								{:else}
+									<button class="md:hidden btn btn-sm mr-4" onclick={drawerOpen}>
+										<Bars3 />
+									</button>
+								{/if}
+																{/snippet}
+								</MediaQuery>
+					
+					{/snippet}
+			</AppBar>
+		
+	{/snippet}
 	<!-- Page Route Content -->
-	<slot />
+	{@render children?.()}
 </AppShell>
