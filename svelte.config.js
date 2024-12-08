@@ -16,7 +16,10 @@ const config = {
 			pages: 'build',
 			precompress: true,
 			strict: true
-		})
+		}),
+		serviceWorker: {
+			register: false
+		}
 	},
 
 	// for more information about preprocessors
