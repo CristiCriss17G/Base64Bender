@@ -1,9 +1,15 @@
 <script lang="ts">
 	import { LightSwitch, getModalStore } from '@skeletonlabs/skeleton';
 	import { modal } from '$lib/helpers/userSettingsModal';
+
+	import ColorThemeSwitcher from './ColorThemeSwitcher.svelte';
 	import Cog6Tooth from './icons/Cog6Tooth.svelte';
 
-	export let isMobile = false;
+	interface Props {
+		isMobile?: boolean;
+	}
+
+	let { isMobile = false }: Props = $props();
 
 	const modalStore = getModalStore();
 
@@ -15,9 +21,10 @@
 {#if isMobile}
 	<div class="container p-10 flex flex-col place-items-center gap-4 h-full place-content-center">
 		<LightSwitch />
+		<ColorThemeSwitcher />
 		<button
 			class="btn hover:rotate-45"
-			on:click={openSettingsMenu}
+			onclick={openSettingsMenu}
 			aria-label="Settings"
 			title="Settings"
 		>
@@ -34,9 +41,10 @@
 	</div>
 {:else}
 	<LightSwitch />
+	<ColorThemeSwitcher />
 	<button
 		class="btn hover:rotate-45"
-		on:click={openSettingsMenu}
+		onclick={openSettingsMenu}
 		aria-label="Settings"
 		title="Settings"
 	>

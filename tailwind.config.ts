@@ -1,8 +1,9 @@
-import { join } from 'path';
 import type { Config } from 'tailwindcss';
+
+import { skeleton } from '@skeletonlabs/tw-plugin';
 import forms from '@tailwindcss/forms';
 import typography from '@tailwindcss/typography';
-import { skeleton } from '@skeletonlabs/tw-plugin';
+import { join } from 'path';
 
 const config = {
 	content: [
@@ -19,7 +20,13 @@ const config = {
 		skeleton({
 			themes: {
 				// Register each theme within this array:
-				preset: [{ enhancements: true, name: 'modern' }]
+				preset: [
+					{ enhancements: true, name: 'crimson' },
+					{ enhancements: true, name: 'hamlindigo' },
+					{ enhancements: true, name: 'modern' },
+					{ enhancements: true, name: 'vintage' },
+					{ enhancements: true, name: 'wintry' }
+				]
 			}
 		})
 	],

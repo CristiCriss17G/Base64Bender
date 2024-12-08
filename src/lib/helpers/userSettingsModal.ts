@@ -1,4 +1,5 @@
 import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
+
 import UserSettingsMenu from '$lib/components/UserSettingsMenu.svelte';
 
 export const modalComponent: ModalComponent = {

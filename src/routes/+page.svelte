@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import Base64Encoder from '$lib/components/Base64Encoder.svelte';
-	import Base64Decoder from '$lib/components/Base64Decoder.svelte';
-	import { originalText, base64Text, initializeUserSettingsUpdate } from '$lib/stores/base64stores';
 	import { getToastStore } from '@skeletonlabs/skeleton';
+	import Base64Decoder from '$lib/components/Base64Decoder.svelte';
+	import Base64Encoder from '$lib/components/Base64Encoder.svelte';
+	import { originalText, base64Text, initializeUserSettingsUpdate } from '$lib/stores/base64stores';
+	import { onMount } from 'svelte';
 
 	const toastStore = getToastStore();
 

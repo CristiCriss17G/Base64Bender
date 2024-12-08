@@ -1,12 +1,21 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	export let query: string;
+	interface ChildrenProps {
+		matches: boolean;
+	}
+
+	interface Props {
+		query: string;
+		children?: import('svelte').Snippet<[ChildrenProps]>;
+	}
+
+	let { query, children }: Props = $props();
 
 	let mql: MediaQueryList;
 	let mqlListener: ((this: MediaQueryList, ev: MediaQueryListEvent) => boolean) | null;
-	let wasMounted = false;
-	let matches = false;
+	let wasMounted = $state(false);
+	let matches = $state(false);
 
 	onMount(() => {
 		wasMounted = true;
@@ -14,13 +23,6 @@
 			removeActiveListener();
 		};
 	});
-
-	$: {
-		if (wasMounted) {
-			removeActiveListener();
-			addNewListener(query);
-		}
-	}
 
 	function addNewListener(query: string) {
 		mql = window.matchMedia(query);
@@ -34,6 +36,12 @@
 			mql.removeEventListener('change', mqlListener);
 		}
 	}
+	$effect(() => {
+		if (wasMounted) {
+			removeActiveListener();
+			addNewListener(query);
+		}
+	});
 </script>
 
-<slot {matches} />
+{@render children?.({ matches })}
