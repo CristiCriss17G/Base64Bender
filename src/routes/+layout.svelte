@@ -68,7 +68,7 @@
 		<AppBar>
 			{#snippet lead()}
 				<Base64Bender sizeClasses="w-10 h-10" />
-				<strong class="text-xl uppercase">Base64Bender</strong>
+				<h1 class="title">Base64Bender</h1>
 			{/snippet}
 			{#snippet trail()}
 				<MediaQuery query="(min-width: 768px)">
@@ -95,3 +95,9 @@
 		</div>
 	</div>
 </div>
+
+<style lang="postcss">
+	.title {
+		@apply text-xl uppercase font-bold;
+	}
+</style>
