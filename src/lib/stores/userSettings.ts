@@ -35,6 +35,6 @@ export function checkOrUpdateUserSettings(userSettingsParam: UserSettings) {
 }
 
 export const userSettings: Writable<UserSettings> = persisted<UserSettings>(
-	'userSettings',
+	'userSettingsB64b',
 	defaultSettings
 );
