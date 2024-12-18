@@ -100,7 +100,9 @@
 			</div>
 		{/snippet}
 		{#snippet additionalControls()}
-			<div class="input-group input-group-divider grid-cols-4 md:grid-cols-[auto_1fr_auto_auto] mt-2">
+			<div
+				class="input-group input-group-divider grid-cols-4 md:grid-cols-[auto_1fr_auto_auto] mt-2"
+			>
 				<div class="input-group-shim">W</div>
 				<input type="number" placeholder="Split by..." bind:value={$userSettings.splitMarker} />
 				<button
