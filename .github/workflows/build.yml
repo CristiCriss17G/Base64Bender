@@ -133,7 +133,7 @@ jobs:
           filename: ${{ github.event.repository.name }}.zip
 
       - name: Upload Release
-        uses: ncipollo/release-action@v1.14.0
+        uses: ncipollo/release-action@v1.16.0
         with:
           artifacts: ${{ github.event.repository.name }}.zip
           token: ${{ github.token }}
