@@ -1,63 +1,65 @@
 <script lang="ts">
-	// Props
-	/** Exposes parent props to this component. */
-	import type { ModalProps } from '@skeletonlabs/skeleton/dist/utilities/Modal/Modal.svelte';
 	// Types
 	import type { UserSettings } from '$lib/types/userSettings';
 
-	// Stores
-	import { SlideToggle, getModalStore } from '@skeletonlabs/skeleton';
 	import { userSettings } from '$lib/stores/userSettings';
+	import { Settings } from '@lucide/svelte';
+	import { Dialog, Portal } from '@skeletonlabs/skeleton-svelte';
+	import { Switch } from '@skeletonlabs/skeleton-svelte';
 	import { get } from 'svelte/store';
-	interface Props {
-		parent: ModalProps;
-		children?: import('svelte').Snippet;
-	}
 
-	let { parent, children }: Props = $props();
+	let theme: UserSettings['theme'] = $state(get(userSettings).theme);
+	let rightClickPaste: UserSettings['rightClickPaste'] = $state(get(userSettings).rightClickPaste);
 
-	const modalStore = getModalStore();
+	userSettings.subscribe((settings) => {
+		theme = settings.theme;
+		rightClickPaste = settings.rightClickPaste;
+	});
 
-	// Form Data
-	const formData: UserSettings = $state(get(userSettings));
-
-	// We've created a custom submit function to pass the response and close the modal.
-	function onFormSubmit(): void {
-		if ($modalStore[0].response) $modalStore[0].response(formData);
-		userSettings.set(formData);
-		modalStore.close();
-	}
-
-	// Base Classes
-	const cBase = 'card p-4 w-modal shadow-xl space-y-4';
-	const cHeader = 'text-2xl font-bold';
-	const cForm = 'border border-surface-500 p-4 space-y-4 rounded-container-token';
+	$effect(() => {
+		userSettings.set({ ...get(userSettings), rightClickPaste, theme });
+	});
 </script>
 
-<!-- @component This example creates a simple form modal. -->
-
-{#if $modalStore[0]}
-	<div class="modal-example-form {cBase}">
-		<header class={cHeader}>{$modalStore[0].title ?? '(title missing)'}</header>
-		<!-- Enable for debugging: -->
-		<form class="modal-form {cForm}">
-			<aside class="alert">
-				<div class="alert-message">
-					<p>Right click to paste</p>
-				</div>
-				<div class="alert-actions">
-					<SlideToggle name="rightClickPaste" bind:checked={formData.rightClickPaste} />
-				</div>
-			</aside>
-		</form>
-
-		{@render children?.()}
-
-		<footer class="modal-footer {parent.regionFooter}">
-			<button class="btn {parent.buttonNeutral}" onclick={parent.onClose}
-				>{parent.buttonTextCancel}</button
-			>
-			<button class="btn {parent.buttonPositive}" onclick={onFormSubmit}>Save</button>
-		</footer>
-	</div>
-{/if}
+<Dialog>
+	<Dialog.Trigger class="btn hover:rotate-45"><Settings /></Dialog.Trigger>
+	<Portal>
+		<Dialog.Backdrop class="fixed inset-0 z-50 bg-surface-50-950/50" />
+		<Dialog.Positioner class="fixed inset-0 z-50 flex items-center justify-center">
+			<Dialog.Content class="w-md space-y-2 card bg-surface-100-900 p-4 shadow-xl">
+				<Dialog.Title class="text-2xl font-bold">User Settings</Dialog.Title>
+				<Dialog.Description>
+					<div class="rounded-container-token space-y-4 border border-surface-500 p-4">
+						<aside class="alert flex justify-between">
+							<div class="alert-message">
+								<p>Right click to paste</p>
+							</div>
+							<div class="alert-actions">
+								<Switch
+									name="rightClickPaste"
+									onCheckedChange={(details) => (rightClickPaste = details.checked)}
+								>
+									<Switch.Control class="data-[state=checked]:preset-filled-success-500">
+										<Switch.Thumb />
+									</Switch.Control>
+									<Switch.HiddenInput />
+								</Switch>
+							</div>
+						</aside>
+						<aside class="alert flex justify-between">
+							<div class="alert-message">
+								<p>Reset color theme to system</p>
+							</div>
+							<div class="alert-actions">
+								<button type="button" class="btn preset-filled" onclick={() => (theme = null)}
+									>Reset</button
+								>
+							</div>
+						</aside>
+					</div>
+				</Dialog.Description>
+				<Dialog.CloseTrigger class="btn preset-tonal">Close</Dialog.CloseTrigger>
+			</Dialog.Content>
+		</Dialog.Positioner>
+	</Portal>
+</Dialog>

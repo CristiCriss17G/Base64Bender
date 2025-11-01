@@ -5,11 +5,11 @@ import { persisted } from 'svelte-persisted-store';
 import { get } from 'svelte/store';
 
 const defaultSettings: UserSettings = {
+	colorTheme: 'modern',
 	isUrlSafe: false,
 	rightClickPaste: false,
 	splitMarker: 0,
-	theme: 'light',
-	colorTheme: 'modern'
+	theme: null
 };
 
 export function checkOrUpdateUserSettings(userSettingsParam: UserSettings) {

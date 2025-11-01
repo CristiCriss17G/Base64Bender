@@ -1,9 +1,8 @@
-import type { ToastSettings, ToastStore } from '@skeletonlabs/skeleton';
-
+import { toaster } from '$lib/stores/toastStore';
 import { userSettings } from '$lib/stores/userSettings';
 import { get } from 'svelte/store';
 
-export async function getClipboardContent(toastStore: ToastStore): Promise<string> {
+export async function getClipboardContent(): Promise<string> {
 	try {
 		const permissionStatus: PermissionStatus = await navigator.permissions.query({
 			name: 'clipboard-read'
@@ -13,19 +12,16 @@ export async function getClipboardContent(toastStore: ToastStore): Promise<strin
 		}
 	} catch (err) {
 		console.error('Could not read from clipboard:', err);
-		const t: ToastSettings = {
-			// Provide any utility or variant background style:
-			background: 'variant-filled-error',
-			message: `Could not read from clipboard: ${err}`,
-			timeout: 2000
-		};
-		toastStore.trigger(t);
+		toaster.error({
+			description: `Could not read from clipboard: ${err}`,
+			duration: 5000,
+			title: 'Clipboard Error'
+		});
 	}
 	return '';
 }
 
 export function initRightClickClipboardAction(
-	toastStore: ToastStore,
 	textarea: HTMLTextAreaElement | null,
 	valueChanger: (value: string) => void,
 	additionalCheck: () => boolean = () => false
@@ -41,7 +37,7 @@ export function initRightClickClipboardAction(
 
 		if (rightClickCount === 1) {
 			e.preventDefault();
-			const clipboardContent: string = await getClipboardContent(toastStore);
+			const clipboardContent: string = await getClipboardContent();
 			if (clipboardContent) {
 				valueChanger(clipboardContent);
 			}

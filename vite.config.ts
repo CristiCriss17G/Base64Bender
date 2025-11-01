@@ -1,12 +1,14 @@
 import { sveltekit } from '@sveltejs/kit/vite';
+import tailwindcss from '@tailwindcss/vite';
 import { SvelteKitPWA } from '@vite-pwa/sveltekit';
-import { purgeCss } from 'vite-plugin-tailwind-purgecss';
+import devtoolsJson from 'vite-plugin-devtools-json';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	plugins: [
+		tailwindcss(),
 		sveltekit(),
-		purgeCss(),
+		devtoolsJson(),
 		SvelteKitPWA({
 			devOptions: {
 				enabled: true,
@@ -53,6 +55,32 @@ export default defineConfig({
 		})
 	],
 	test: {
-		include: ['src/**/*.{test,spec}.{js,ts}']
+		expect: { requireAssertions: true },
+		projects: [
+			{
+				extends: './vite.config.ts',
+				test: {
+					browser: {
+						enabled: true,
+						instances: [{ browser: 'chromium' }],
+						provider: 'playwright'
+					},
+					environment: 'browser',
+					exclude: ['src/lib/server/**'],
+					include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
+					name: 'client',
+					setupFiles: ['./vitest-setup-client.ts']
+				}
+			},
+			{
+				extends: './vite.config.ts',
+				test: {
+					environment: 'node',
+					exclude: ['src/**/*.svelte.{test,spec}.{js,ts}'],
+					include: ['src/**/*.{test,spec}.{js,ts}'],
+					name: 'server'
+				}
+			}
+		]
 	}
 });

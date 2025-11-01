@@ -1,22 +1,19 @@
 <script lang="ts">
 	import type { Writable } from 'svelte/store';
 
-	import { getToastStore } from '@skeletonlabs/skeleton';
 	import { initRightClickClipboardAction } from '$lib/helpers/clipboardHelpers';
 	import { userSettings } from '$lib/stores/userSettings';
+	import { FileUp } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 
 	import DefaultBase64Controls from './DefaultBase64Controls.svelte';
-	import DocumentArrowUp from './icons/DocumentArrowUp.svelte';
 
 	interface Props {
-		value: Writable<string>;
 		base64EncoderFunction: (value: string) => void;
+		value: Writable<string>;
 	}
 
-	let { value, base64EncoderFunction }: Props = $props();
-
-	const toastStore = getToastStore();
+	let { base64EncoderFunction, value }: Props = $props();
 
 	const textareaId: string = 'base64decoded';
 
@@ -41,9 +38,9 @@
 	onMount(() => {
 		const textarea = document.getElementById(textareaId) as HTMLTextAreaElement;
 		userSettings.subscribe(() => {
-			initRightClickClipboardAction(toastStore, textarea, valueChanger, additionalCheck);
+			initRightClickClipboardAction(textarea, valueChanger, additionalCheck);
 		});
-		return initRightClickClipboardAction(toastStore, textarea, valueChanger, additionalCheck);
+		return initRightClickClipboardAction(textarea, valueChanger, additionalCheck);
 	});
 </script>
 
@@ -56,37 +53,38 @@
 		{valueChanger}
 	>
 		{#snippet textareaControls({
-			handleDrop,
-			handleDragOver,
+			fileDropClassesActive,
 			handleDragLeave,
-			isDragging,
-			fileDropClassesActive
+			handleDragOver,
+			handleDrop,
+			isDragging
 		})}
 			<div class="relative">
 				<textarea
-					class={`textarea main-textarea ${fileDropClassesActive}`}
+					class={['main-textarea', 'textarea', fileDropClassesActive]}
 					id={textareaId}
 					bind:value={$value}
 					oninput={() => base64EncoderFunction($value)}
 					placeholder="Place normal string or drop a file..."
 					data-clipboard={textareaId}
 					readonly={lockTextarea}
+					disabled={lockTextarea}
 					ondrop={handleDrop}
 					ondragover={handleDragOver}
 					ondragleave={handleDragLeave}
 				></textarea>
 				{#if isDragging}
 					<div
-						class="absolute pointer-events-none inset-0 flex flex-col items-center justify-center"
+						class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"
 					>
-						<figure class="animate-bounce"><DocumentArrowUp sizeClasses="w-24 h-24" /></figure>
-						<p class="text-white text-xl font-bold">Drop your file here</p>
+						<figure class="animate-bounce"><FileUp class="h-24 w-24" /></figure>
+						<p class="text-xl font-bold text-white">Drop your file here</p>
 					</div>
 				{/if}
 			</div>
 		{/snippet}
 		{#snippet additionalControls()}
-			<label class="flex items-center space-x-2 mt-2">
+			<label class="mt-2 flex items-center space-x-2">
 				<input class="checkbox" type="checkbox" bind:checked={$userSettings.isUrlSafe} />
 				<p>URL Safe</p>
 			</label>

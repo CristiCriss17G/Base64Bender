@@ -1,65 +1,74 @@
 <script lang="ts">
-	import { clipboard } from '@skeletonlabs/skeleton';
-	import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
-
-	import ClipboardDocumentListIcon from './icons/ClipboardDocumentListIcon.svelte';
-	import DocumentMinus from './icons/DocumentMinus.svelte';
-	import LockClosedIcon from './icons/LockClosedIcon.svelte';
-	import LockOpenIcon from './icons/LockOpenIcon.svelte';
+	import { toaster } from '$lib/stores/toastStore';
+	import { ClipboardList, FileMinus, Lock, LockOpen } from '@lucide/svelte';
 
 	interface TextAreaControlsProps {
-		handleDrop: (event: DragEvent) => void;
-		handleDragOver: (event: DragEvent) => void;
+		fileDropClassesActive: string[];
 		handleDragLeave: (event: DragEvent) => void;
+		handleDragOver: (event: DragEvent) => void;
+		handleDrop: (event: DragEvent) => void;
 		isDragging: boolean;
-		fileDropClassesActive: string;
 	}
 
 	interface Props {
-		textareaId: string;
-		zoneType: string;
-		lockFunction: () => boolean;
-		valueChanger: (value: string) => void;
-		textValue: string;
-		textareaControls?: import('svelte').Snippet<[TextAreaControlsProps]>;
 		additionalControls?: import('svelte').Snippet;
+		lockFunction: () => boolean;
+		textareaControls?: import('svelte').Snippet<[TextAreaControlsProps]>;
+		textareaId: string;
+		textValue: string;
+		valueChanger: (value: string) => void;
+		zoneType: string;
 	}
 
 	let {
-		textareaId,
-		zoneType,
+		additionalControls,
 		lockFunction,
-		valueChanger,
-		textValue,
 		textareaControls,
-		additionalControls
+		textareaId,
+		textValue,
+		valueChanger,
+		zoneType
 	}: Props = $props();
 
-	const toastStore = getToastStore();
 	let lockState = $state(false);
 	let isDragging: boolean = $state(false);
-	const fileDropClasses: string = 'outline-4 outline-dashed';
-	let fileDropClassesActive: string = $state('');
+	const fileDropClasses: string[] = [
+		'outline-dashed',
+		'outline-current',
+		'outline-offset-2',
+		'outline-4'
+	];
+	let fileDropClassesActive: string[] = $state([]);
+	let textarea: HTMLTextAreaElement | null = null;
 
-	const clipboardCopied = () => {
-		const t: ToastSettings = {
-			// Provide any utility or variant background style:
-			background: 'variant-filled-success',
-			message: `Copied ${zoneType} text to clipboard!`,
-			timeout: 2000
-		};
-		toastStore.trigger(t);
-	};
+	async function clipboardCopy() {
+		if (!textarea) {
+			textarea = document.getElementById(textareaId) as HTMLTextAreaElement;
+		}
+		textarea.select();
+		if (!textarea.value) {
+			toaster.error({
+				description: `There is no ${zoneType} text to copy!`,
+				duration: 2000,
+				title: 'Empty Textarea'
+			});
+			return;
+		}
+		await navigator.clipboard.writeText(textarea.value);
+		toaster.success({
+			description: `Copied ${zoneType} text to clipboard!`,
+			duration: 2000,
+			title: 'Copied'
+		});
+	}
 
-	const textareaLocked = () => {
-		const t: ToastSettings = {
-			// Provide any utility or variant background style:
-			background: 'variant-filled-success',
-			message: `${zoneType} textarea is ${lockState ? 'locked' : 'unlocked'}!`,
-			timeout: 2000
-		};
-		toastStore.trigger(t);
-	};
+	function textareaLocked() {
+		toaster.success({
+			description: `${zoneType} textarea is ${lockState ? 'locked' : 'unlocked'}!`,
+			duration: 2000,
+			title: lockState ? 'Locked' : 'Unlocked'
+		});
+	}
 
 	// file upload
 	const allowedExtensions = [
@@ -103,13 +112,11 @@
 		if (files && files.length > 0) {
 			file = files[0];
 			if (!isValidFileExtension(file.name)) {
-				const t: ToastSettings = {
-					// Provide any utility or variant background style:
-					background: 'variant-filled-error',
-					message: `Invalid file type!<br />Allowed file types: ${allowedExtensions.join(', ')}`,
-					timeout: 3000
-				};
-				toastStore.trigger(t);
+				toaster.error({
+					description: `Allowed file types: ${allowedExtensions.join(', ')}`,
+					duration: 3000,
+					title: 'Invalid File Type'
+				});
 				return;
 			}
 			const reader = new FileReader();
@@ -117,13 +124,11 @@
 			reader.onload = (e) => {
 				const data = e.target?.result as string;
 				if (isBinary(data)) {
-					const t: ToastSettings = {
-						// Provide any utility or variant background style:
-						background: 'variant-filled-error',
-						message: `Binary file detected!`,
-						timeout: 2000
-					};
-					toastStore.trigger(t);
+					toaster.error({
+						description: `The uploaded file appears to be a binary file and cannot be processed.`,
+						duration: 2000,
+						title: 'Binary File Detected'
+					});
 				} else {
 					valueChanger(data);
 				}
@@ -143,7 +148,7 @@
 	function handleDrop(event: DragEvent) {
 		event.preventDefault();
 		isDragging = false;
-		fileDropClassesActive = '';
+		fileDropClassesActive = [];
 		if (event.dataTransfer && event.dataTransfer.files) {
 			processFiles(event.dataTransfer.files);
 		}
@@ -158,7 +163,7 @@
 	function handleDragLeave(event: DragEvent) {
 		event.preventDefault();
 		isDragging = false;
-		fileDropClassesActive = '';
+		fileDropClassesActive = [];
 	}
 
 	// save to file
@@ -176,24 +181,23 @@
 </script>
 
 {@render textareaControls?.({
-	handleDrop,
-	handleDragOver,
+	fileDropClassesActive,
 	handleDragLeave,
-	isDragging,
-	fileDropClassesActive
+	handleDragOver,
+	handleDrop,
+	isDragging
 })}
 
-<div class="input-group input-group-divider grid-cols-[auto_auto_auto] mt-2">
+<div class="mt-2 input-group grid-cols-[auto_auto_auto]">
 	<button
-		class="btn-control variant-filled-primary sep-border"
+		class="ig-btn justify-center! border-e border-solid border-e-primary-100 preset-filled-primary-500 p-2"
 		title="Copy to clipboard"
-		use:clipboard={{ input: textareaId }}
-		onclick={clipboardCopied}
+		onclick={clipboardCopy}
 	>
-		<ClipboardDocumentListIcon />
+		<ClipboardList />
 	</button>
 	<button
-		class="btn-control variant-filled-primary sep-border"
+		class="ig-btn justify-center! border-e border-solid border-e-primary-100 preset-filled-primary-500 p-2"
 		title="Lock the textarea"
 		onclick={() => {
 			lockState = lockFunction();
@@ -201,40 +205,34 @@
 		}}
 	>
 		{#if lockState}
-			<LockClosedIcon />
+			<Lock />
 		{:else}
-			<LockOpenIcon />
+			<LockOpen />
 		{/if}
 	</button>
 	<button
-		class="btn-control variant-filled-primary"
+		class="ig-btn justify-center! preset-filled-primary-500 p-2"
 		title="Clear"
 		onclick={() => {
 			valueChanger('');
 		}}
 	>
-		<DocumentMinus />
+		<FileMinus />
 	</button>
 </div>
 
-<div class="mt-2 flex flex-col md:flex-row gap-2">
+<div class="mt-2 flex flex-col gap-2 md:flex-row">
 	<input class="input" type="file" onchange={handleFileChange} />
-	<div class="input-group input-group-divider grid-cols-[auto_auto]">
-		<button class="btn-control variant-filled-primary" title="Save to file" onclick={saveToFile}>
+	<div class="input-group grid-cols-[auto_auto]">
+		<button
+			class="ig-btn justify-center! preset-filled-primary-500 p-2"
+			title="Save to file"
+			onclick={saveToFile}
+		>
 			Download
 		</button>
-		<input type="text" placeholder="filename.txt" bind:value={downloadFilename} />
+		<input class="ig-input" type="text" placeholder="filename.txt" bind:value={downloadFilename} />
 	</div>
 </div>
 
 {@render additionalControls?.()}
-
-<style lang="postcss">
-	.btn-control {
-		@apply !justify-center p-2;
-
-		&.sep-border {
-			@apply border-solid border-e border-e-primary-100;
-		}
-	}
-</style>

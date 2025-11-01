@@ -1,22 +1,19 @@
 <script lang="ts">
 	import type { Writable } from 'svelte/store';
 
-	import { getToastStore } from '@skeletonlabs/skeleton';
 	import { initRightClickClipboardAction } from '$lib/helpers/clipboardHelpers';
 	import { userSettings } from '$lib/stores/userSettings';
+	import { FileUp } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 
 	import DefaultBase64Controls from './DefaultBase64Controls.svelte';
-	import DocumentArrowUp from './icons/DocumentArrowUp.svelte';
 
 	interface Props {
-		value: Writable<string>;
 		base64DecoderFunction: (value: string) => void;
+		value: Writable<string>;
 	}
 
-	let { value, base64DecoderFunction }: Props = $props();
-
-	const toastStore = getToastStore();
+	let { base64DecoderFunction, value }: Props = $props();
 
 	const textareaId: string = 'base64encoded';
 
@@ -44,10 +41,9 @@
 	onMount(() => {
 		const textarea = document.getElementById(textareaId) as HTMLTextAreaElement;
 		userSettings.subscribe(() => {
-			initRightClickClipboardAction(toastStore, textarea, valueChanger, additionalCheck);
+			initRightClickClipboardAction(textarea, valueChanger, additionalCheck);
 		});
 		const rightClickEventRemove = initRightClickClipboardAction(
-			toastStore,
 			textarea,
 			valueChanger,
 			additionalCheck
@@ -69,15 +65,15 @@
 		{valueChanger}
 	>
 		{#snippet textareaControls({
-			handleDrop,
-			handleDragOver,
+			fileDropClassesActive,
 			handleDragLeave,
-			isDragging,
-			fileDropClassesActive
+			handleDragOver,
+			handleDrop,
+			isDragging
 		})}
 			<div class="relative">
 				<textarea
-					class={`textarea main-textarea as-code break-all ${fileDropClassesActive}`}
+					class={['main-textarea', 'as-code', 'textarea', 'break-all', fileDropClassesActive]}
 					id={textareaId}
 					bind:value={$value}
 					oninput={() => base64DecoderFunction($value)}
@@ -85,32 +81,36 @@
 					spellcheck="false"
 					data-clipboard={textareaId}
 					readonly={lockTextarea}
+					disabled={lockTextarea}
 					ondrop={handleDrop}
 					ondragover={handleDragOver}
 					ondragleave={handleDragLeave}
 				></textarea>
 				{#if isDragging}
 					<div
-						class="absolute pointer-events-none inset-0 flex flex-col items-center justify-center"
+						class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"
 					>
-						<figure class="animate-bounce"><DocumentArrowUp sizeClasses="w-24 h-24" /></figure>
-						<p class="text-white text-xl font-bold">Drop your file here</p>
+						<figure class="animate-bounce"><FileUp class="h-24 w-24" /></figure>
+						<p class="text-xl font-bold text-white">Drop your file here</p>
 					</div>
 				{/if}
 			</div>
 		{/snippet}
 		{#snippet additionalControls()}
-			<div
-				class="input-group input-group-divider grid-cols-4 md:grid-cols-[auto_1fr_auto_auto] mt-2"
-			>
-				<div class="input-group-shim">W</div>
-				<input type="number" placeholder="Split by..." bind:value={$userSettings.splitMarker} />
+			<div class="mt-2 input-group grid-cols-4 md:grid-cols-[auto_1fr_auto_auto]">
+				<div class="ig-cell">W</div>
+				<input
+					class="ig-input"
+					type="number"
+					placeholder="Split by..."
+					bind:value={$userSettings.splitMarker}
+				/>
 				<button
-					class="variant-filled-secondary border-solid border-e border-e-secondary-100"
+					class="ig-btn border-e border-solid border-e-secondary-100 preset-filled-secondary-500"
 					onclick={() => ($userSettings.splitMarker = 0)}>W0</button
 				>
 				<button
-					class="button variant-filled-secondary"
+					class="ig-btn preset-filled-secondary-500"
 					onclick={() => ($userSettings.splitMarker = 76)}>W76</button
 				>
 			</div>
