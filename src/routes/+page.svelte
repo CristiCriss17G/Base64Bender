@@ -1,13 +1,14 @@
 <script lang="ts">
-	import { getToastStore } from '@skeletonlabs/skeleton';
 	import Base64Decoder from '$lib/components/Base64Decoder.svelte';
 	import Base64Encoder from '$lib/components/Base64Encoder.svelte';
-	import { originalText, base64Text, initializeUserSettingsUpdate } from '$lib/stores/base64stores';
+	import {
+		base64Text,
+		initializeUserSettingsUpdate,
+		originalText
+	} from '$lib/stores/base64stores.svelte';
 	import { onMount } from 'svelte';
 
-	const toastStore = getToastStore();
-
-	const { fromBase64, toBase64 } = initializeUserSettingsUpdate(toastStore);
+	const { fromBase64, toBase64 } = initializeUserSettingsUpdate();
 
 	onMount(() => {
 		window.addEventListener('dragover', (e: DragEvent) => e.preventDefault());
@@ -26,23 +27,14 @@
 	<meta name="robots" content="index, follow" />
 </svelte:head>
 
-<div class="main-container">
-	<section class="main-column">
+<div class="container mx-auto flex h-full flex-col items-start justify-center md:flex-row">
+	<section class="flex w-full flex-col items-center p-5 text-center md:w-1/2 md:p-10">
 		<h2 class="h2">Base64 Decoder</h2>
 		<Base64Decoder value={base64Text} base64DecoderFunction={fromBase64} />
 	</section>
-	<hr class="!border-t-4 border-slate-500 divider w-11/12 mx-auto md:hidden" />
-	<section class="main-column">
+	<hr class="divider mx-auto w-11/12 border-t-4! border-slate-500 md:hidden" />
+	<section class="flex w-full flex-col items-center p-5 text-center md:w-1/2 md:p-10">
 		<h2 class="h2">Base64 Encoder</h2>
 		<Base64Encoder value={originalText} base64EncoderFunction={toBase64} />
 	</section>
 </div>
-
-<style lang="postcss">
-	.main-container {
-		@apply container h-full mx-auto flex flex-col md:flex-row justify-center items-start;
-	}
-	.main-column {
-		@apply p-5 md:p-10 text-center flex flex-col items-center w-full md:w-1/2;
-	}
-</style>

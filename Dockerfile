@@ -4,11 +4,11 @@
 # If you need more help, visit the Dockerfile reference guide at
 # https://docs.docker.com/engine/reference/builder/
 
-ARG NODE_VERSION=22
+ARG BUN_VERSION=1.3
 
 ################################################################################
 # Use node image for base image for all stages.
-FROM node:${NODE_VERSION}-alpine AS base
+FROM oven/bun:${BUN_VERSION}-alpine AS base
 
 RUN apk update && apk --no-cache upgrade && apk add --no-cache bash && rm -rf /var/cache/apk/*
 SHELL ["/bin/bash", "-c"]
@@ -16,14 +16,12 @@ SHELL ["/bin/bash", "-c"]
 # Set working directory for all build stages.
 WORKDIR /usr/src/app
 
-RUN npm install -g npm@~10.x.x pnpm@~9.x.x
-
 ################################################################################
 # Create a stage for building the application.
 FROM base AS build
 
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
 
 # Copy the rest of the source files into the image.
 COPY . .
@@ -31,9 +29,9 @@ COPY . .
 ENV NODE_ENV=production
 
 # Run the build script.
-RUN pnpm run build
+RUN bun run build
 
-FROM nginx:1.27-alpine AS brotli
+FROM nginx:1.29-alpine AS brotli
 
 RUN apk update && apk --no-cache upgrade \
     && apk add --no-cache bash brotli build-base cmake git pcre-dev tar wget zlib-dev \
@@ -61,7 +59,7 @@ RUN ./configure --with-compat --add-dynamic-module=../ngx_brotli \
 # Create a new stage to run the application with minimal runtime dependencies
 # where the necessary files are copied from the build stage.
 # Use nginx image to serve the static site
-FROM nginx:1.27-alpine AS runtime
+FROM nginx:1.29-alpine AS runtime
 
 RUN apk update && apk --no-cache upgrade && rm -rf /var/cache/apk/*
 
