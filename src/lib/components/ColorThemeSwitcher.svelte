@@ -4,12 +4,24 @@
 	import { capitalizeFirstLetter } from '$lib/helpers/strings';
 	import { userSettings } from '$lib/stores/userSettings';
 
-	const options: ColorTheme[] = ['crimson', 'hamlindigo', 'modern', 'vintage', 'wintry'];
+	const options: ColorTheme[] = [
+		'cerberus',
+		'crimson',
+		'hamlindigo',
+		'modern',
+		'vintage',
+		'wintry',
+		'mint',
+		'nosh',
+		'nouveau',
+		'seafoam',
+		'terminus'
+	];
 </script>
 
 <div>
 	<select class="select max-w-32" bind:value={$userSettings.colorTheme}>
-		{#each options as option}
+		{#each options as option (option)}
 			<option value={option}>{capitalizeFirstLetter(option)}</option>
 		{/each}
 	</select>

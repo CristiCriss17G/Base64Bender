@@ -1,37 +1,22 @@
 <script lang="ts">
-	import { LightSwitch, getModalStore } from '@skeletonlabs/skeleton';
-	import { modal } from '$lib/helpers/userSettingsModal';
-
 	import ColorThemeSwitcher from './ColorThemeSwitcher.svelte';
-	import Cog6Tooth from './icons/Cog6Tooth.svelte';
+	import LightSwitch from './LightSwitch.svelte';
+	import UserSettingsMenu from './UserSettingsMenu.svelte';
 
 	interface Props {
 		isMobile?: boolean;
 	}
 
 	let { isMobile = false }: Props = $props();
-
-	const modalStore = getModalStore();
-
-	const openSettingsMenu = () => {
-		modalStore.trigger(modal);
-	};
 </script>
 
 {#if isMobile}
-	<div class="container p-10 flex flex-col place-items-center gap-4 h-full place-content-center">
+	<div class="container flex h-full flex-col place-content-center place-items-center gap-4 p-10">
 		<LightSwitch />
 		<ColorThemeSwitcher />
-		<button
-			class="btn hover:rotate-45"
-			onclick={openSettingsMenu}
-			aria-label="Settings"
-			title="Settings"
-		>
-			<Cog6Tooth />
-		</button>
+		<UserSettingsMenu />
 		<a
-			class="btn variant-ghost-surface"
+			class="btn hover:preset-tonal"
 			href="https://github.com/CristiCriss17G/Base64Bender"
 			target="_blank"
 			rel="noreferrer"
@@ -42,16 +27,9 @@
 {:else}
 	<LightSwitch />
 	<ColorThemeSwitcher />
-	<button
-		class="btn hover:rotate-45"
-		onclick={openSettingsMenu}
-		aria-label="Settings"
-		title="Settings"
-	>
-		<Cog6Tooth />
-	</button>
+	<UserSettingsMenu />
 	<a
-		class="btn btn-sm variant-ghost-surface"
+		class="btn preset-tonal btn-sm"
 		href="https://github.com/CristiCriss17G/Base64Bender"
 		target="_blank"
 		rel="noreferrer"
