@@ -60,7 +60,7 @@
 		"@tailwindcss/oxide"
 	],
 	"dependencies": {
-		"@lucide/svelte": "^0.552.0",
+		"@lucide/svelte": "^0.554.0",
 		"svelte-persisted-store": "^0.12.0"
 	}
 }
